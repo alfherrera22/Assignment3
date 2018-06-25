@@ -1,6 +1,6 @@
 /*
     Assignment 3 CS 570
-    June 27th 2018
+    June 26th 2018
     Guy Leonard
     Pierre Kharat
     Alfonso Herrera
@@ -37,59 +37,65 @@ int work(int sec){
 	clock_t start;
     double duration;
 	
-	pid_t PID, PID2;
 	
-	
-	/* This child process should notify the other child
-	 * upon reaching the specified number of seconds 
-	 */
-	
-	PID = fork();
-	
-	if(PID == 0){ //Child proccess executes code here
-		
-		/* This second child prints the hour, minute, and second 
-		 * of the time of day to the user terminal once every 
-		 * second 
-		 */
-		PID2 = fork();
-		
-		if(PID == 0){ //Child process executes code here
-			
-			
-		}
-		
-		else if(PID > 0){//Parent process executes code here
-			
-		
-		}
-		
-		else{
-			perror("fork() error");
-			exit(-1);		
-		} // End if
-		
-	}
 
-	else if(PID > 0){ //Parent process executes code here
-		
-		cout << "\nHave a nice day" << endl;
-	}
-
-	else{
-		perror("fork() error");
-		exit(-1);		
-	} // End if
-
-
-    //start = clock();
-    //sleep(sec);
+    start = clock();
+    sleep(sec);
     
-	//duration = ( clock() - start ) / CLOCKS_PER_SEC;	
+	duration = ( clock() - start ) / CLOCKS_PER_SEC;	
 	
-	//printf("Duration = %4.2f\n",duration);
+	printf("Duration = %4.2f\n",duration);
 	
 	
 	
 	return 0;
 }
+
+
+
+//pid_t PID, PID2;
+	
+	
+	///* This child thread should notify the other child
+	 //* upon reaching the specified number of seconds 
+	 //*/
+	
+	//PID = fork();
+	
+	//if(PID == 0){ //Child proccess executes code here
+		
+		///* This second child prints the hour, minute, and second 
+		 //* of the time of day to the user terminal once every 
+		 //* second 
+		 //*/
+		//PID2 = fork();
+		
+		//if(PID == 0){ //Child process executes code here
+			
+			
+		//}
+		
+		//else if(PID > 0){//Parent process executes code here
+			
+		
+		//}
+		
+		//else{
+			//perror("fork() error");
+			//exit(-1);		
+		//} // End if
+		
+		
+		
+		
+	//}
+
+	//else if(PID > 0){ //Parent process executes code here
+		
+		//cout << "\nHave a nice day" << endl;
+	//}
+
+	//else{
+		//perror("fork() error");
+		//exit(-1);		
+	//} // End if
