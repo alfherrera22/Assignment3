@@ -12,12 +12,13 @@ using namespace std;
 
 pthread_t COUNT,PRINT;
 
-int main(int argc, char* argv[]){
-	// Gets the local time
-	time_t rawtime, temp;
-  	struct tm * timeinfo, tmp;
+time_t rawtime;
+time_t endingtime;
+struct tm * timeinfo;
+struct tm * endinginfo;
 
-  	time(&rawtime);
+int main(int argc, char* argv[]){
+	time(&rawtime);
   	timeinfo = localtime(&rawtime);
 	printf("Duration = %s", asctime(timeinfo));
 	
@@ -29,10 +30,10 @@ int main(int argc, char* argv[]){
 		
 		// Adds 25 seconds to local time;
 		// To be used for while loop
-		temp = mktime(timeinfo);
-		temp += 25;
-		tmp = localtime(&temp);
-	}
+		endingtime = mktime(timeinfo);
+		endingtime += 25;
+		endinginfo = localtime(&endingtime);
+	} // End if
 	
 	else if (argc > 1){
 		
@@ -41,7 +42,7 @@ int main(int argc, char* argv[]){
 		if((sec = atoi(argv[1])) == 0){
 			cout << "Invalid number. Program will exit"<< endl;
 			return 0;
-		}
+		} // End if
 		
 		else{
 			pthread_create(&COUNT, NULL, &seek_Time, (void*)sec);
@@ -49,32 +50,37 @@ int main(int argc, char* argv[]){
 			
 			// Adds given amount of time to localtime;
 			// To be used for while loop
-			temp = mktime(timeinfo);
-			temp += sec;
-			tmp = localtime(&temp);
-		}
-	}
+			endingtime = mktime(timeinfo);
+			endingtime += sec;
+			endinginfo = localtime(&endingtime);
+		} // End else
+	} // End else
 	
 	return 0;
-}
+} // End main
 
 
 void *seek_Time(void *i){
-	time_t rawtime;
-  	struct tm * timeinfo;
-
   	time(&rawtime);
   	timeinfo = localtime(&rawtime);
 	
 	printf("Duration = %s", asctime(timeinfo));
 	
 	pthread_exit(NULL);
-}
+} // End *seek_Time()
 
 
 void *print_Time(void *i){
+  	time(&rawtime);
+  	timeinfo = localtime(&rawtime);
 	
-	cout << 50 << endl;
+	// While loop prints current time until
+	// Stopping time is reached
+	while(mktime(timeinfo) != endingtime) {
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		printf("Duration = %s", asctime(timeinfo));
+	} // End while
 	
 	pthread_exit(NULL);
-}
+} // End *print_Time()
