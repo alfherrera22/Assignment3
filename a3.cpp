@@ -51,10 +51,10 @@ int main(int argc, char* argv[]){
 void *seek_Time(void *i){
 
 	time_t rawtime;
-  struct tm * timeinfo;
+  	struct tm * timeinfo;
 
-  time(&rawtime);
-  timeinfo = localtime(&rawtime);
+  	time(&rawtime);
+  	timeinfo = localtime(&rawtime);
 	
 	printf("Duration = %s", asctime(timeinfo));
 }
