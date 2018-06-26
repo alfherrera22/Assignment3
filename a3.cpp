@@ -49,7 +49,6 @@ int main(int argc, char* argv[]){
 
 
 void *seek_Time(void *i){
-
 	time_t rawtime;
   	struct tm * timeinfo;
 
