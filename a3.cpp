@@ -16,6 +16,7 @@ time_t rawtime;
 time_t endingtime;
 struct tm * timeinfo;
 struct tm * endinginfo;
+long sec;
 
 int main(int argc, char* argv[]){
 	time(&rawtime);
@@ -25,19 +26,21 @@ int main(int argc, char* argv[]){
 	//Use default 25 sec if no argument
 	if(argc == 1){ 
 		
-		pthread_create(&COUNT, NULL, &seek_Time, (void*)STANDARD_TIME);
-		pthread_create(&PRINT, NULL, &print_Time, NULL);
-		
 		// Adds 25 seconds to local time;
 		// To be used for while loop
 		endingtime = mktime(timeinfo);
-		endingtime += 25;
+		endingtime += STANDARD_TIME;
 		endinginfo = localtime(&endingtime);
+		
+		pthread_create(&COUNT, NULL, &seek_Time, NULL);
+		pthread_create(&PRINT, NULL, &print_Time, NULL);
+		
+		pthread_join(COUNT,NULL);
+		pthread_join(PRINT,NULL);
+		
 	} // End if
 	
 	else if (argc > 1){
-		
-		long sec;
 		
 		if((sec = atoi(argv[1])) == 0){
 			cout << "Invalid number. Program will exit"<< endl;
@@ -45,14 +48,19 @@ int main(int argc, char* argv[]){
 		} // End if
 		
 		else{
-			pthread_create(&COUNT, NULL, &seek_Time, (void*)sec);
-			pthread_create(&PRINT, NULL, &print_Time, NULL);
 			
 			// Adds given amount of time to localtime;
 			// To be used for while loop
 			endingtime = mktime(timeinfo);
 			endingtime += sec;
 			endinginfo = localtime(&endingtime);
+			
+			pthread_create(&COUNT, NULL, &seek_Time, NULL);
+			pthread_create(&PRINT, NULL, &print_Time, NULL);
+			
+			pthread_join(COUNT,NULL);
+			pthread_join(PRINT,NULL);
+			
 		} // End else
 	} // End else
 	
@@ -61,6 +69,7 @@ int main(int argc, char* argv[]){
 
 
 void *seek_Time(void *i){
+	
   	time(&rawtime);
   	timeinfo = localtime(&rawtime);
 	
@@ -71,6 +80,7 @@ void *seek_Time(void *i){
 
 
 void *print_Time(void *i){
+	
   	time(&rawtime);
   	timeinfo = localtime(&rawtime);
 	
@@ -80,6 +90,7 @@ void *print_Time(void *i){
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		printf("Duration = %s", asctime(timeinfo));
+		sleep(1);
 	} // End while
 	
 	pthread_exit(NULL);
