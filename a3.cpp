@@ -50,20 +50,13 @@ int main(int argc, char* argv[]){
 
 void *seek_Time(void *i){
 
-	clock_t start;
-    	double duration;
-    
-	int sec = *((int *) i);
-	
+	time_t rawtime;
+  struct tm * timeinfo;
 
-    start = clock();
-    sleep(sec);
-    
-	duration = ( clock() - start ) / CLOCKS_PER_SEC;	
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
 	
-	printf("Duration = %4.2f\n",duration);
-	
-	pthread_exit(NULL);
+	printf("Duration = %s", asctime(timeinfo));
 }
 
 
