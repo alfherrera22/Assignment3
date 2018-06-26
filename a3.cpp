@@ -10,10 +10,9 @@
 
 using namespace std;
 
+pthread_t COUNT,PRINT;
+
 int main(int argc, char* argv[]){
-	
-	pthread_t COUNT,PRINT;
-	
 	
 	
 	//Use default 25 sec if no argument
@@ -26,7 +25,7 @@ int main(int argc, char* argv[]){
 	
 	else if (argc > 1){
 		
-		int sec;
+		long sec;
 		
 		if((sec = atoi(argv[1])) == 0){
 			cout << "Invalid number. Program will exit"<< endl;
@@ -45,6 +44,7 @@ int main(int argc, char* argv[]){
 
 
 void *seek_Time(void *i){
+	
 	time_t rawtime;
   	struct tm * timeinfo;
 
@@ -52,11 +52,14 @@ void *seek_Time(void *i){
   	timeinfo = localtime(&rawtime);
 	
 	printf("Duration = %s", asctime(timeinfo));
+	
+	pthread_exit(NULL);
 }
 
 
 void *print_Time(void *i){
 	
+	cout << 50 << endl;
 	
 	pthread_exit(NULL);
 }
