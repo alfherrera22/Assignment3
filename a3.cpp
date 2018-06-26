@@ -16,12 +16,15 @@ time_t rawtime;
 time_t endingtime;
 struct tm * timeinfo;
 struct tm * endinginfo;
-long sec;
+
+//Signal that will notify the PRINT thread to terminate
+bool sig = true;
 
 int main(int argc, char* argv[]){
+	
 	time(&rawtime);
   	timeinfo = localtime(&rawtime);
-	printf("Duration = %s", asctime(timeinfo));
+	//printf("Duration = %s", asctime(timeinfo));
 	
 	//Use default 25 sec if no argument
 	if(argc == 1){ 
@@ -41,6 +44,8 @@ int main(int argc, char* argv[]){
 	} // End if
 	
 	else if (argc > 1){
+		
+		long sec;
 		
 		if((sec = atoi(argv[1])) == 0){
 			cout << "Invalid number. Program will exit"<< endl;
@@ -64,6 +69,8 @@ int main(int argc, char* argv[]){
 		} // End else
 	} // End else
 	
+	cout << "\nProgram just finished. Have a nice day.\n";
+	
 	return 0;
 } // End main
 
@@ -73,8 +80,10 @@ void *seek_Time(void *i){
   	time(&rawtime);
   	timeinfo = localtime(&rawtime);
 	
-	printf("Duration = %s", asctime(timeinfo));
+	while(mktime(timeinfo) != endingtime);
 	
+	sig = false;
+
 	pthread_exit(NULL);
 } // End *seek_Time()
 
@@ -84,14 +93,18 @@ void *print_Time(void *i){
   	time(&rawtime);
   	timeinfo = localtime(&rawtime);
 	
+	
 	// While loop prints current time until
 	// Stopping time is reached
-	while(mktime(timeinfo) != endingtime) {
+	
+	while(sig) {
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		printf("Duration = %s", asctime(timeinfo));
 		sleep(1);
 	} // End while
 	
+	
 	pthread_exit(NULL);
 } // End *print_Time()
+
