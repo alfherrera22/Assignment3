@@ -13,7 +13,18 @@ using namespace std;
 pthread_t COUNT,PRINT;
 
 int main(int argc, char* argv[]){
+	time_t rawtime;
+  	struct tm * timeinfo;
+	struct tm * tmp;
+
+  	time(&rawtime);
+  	timeinfo = localtime(&rawtime);
+	printf("Duration = %s", asctime(timeinfo));
 	
+	time_t temp = mktime(timeinfo);
+	temp += 25;
+	tmp = localtime(&temp);
+	printf("Duration = %s", asctime(tmp));
 	
 	//Use default 25 sec if no argument
 	if(argc == 1){ 
@@ -44,7 +55,6 @@ int main(int argc, char* argv[]){
 
 
 void *seek_Time(void *i){
-	
 	time_t rawtime;
   	struct tm * timeinfo;
 
