@@ -22,8 +22,6 @@ int main(int argc, char* argv[]){
 		pthread_create(&COUNT, NULL, &seek_Time, (void*)STANDARD_TIME);
 		pthread_create(&PRINT, NULL, &print_Time, NULL);
 		
-		pthread_join(COUNT,NULL);
-		pthread_join(PRINT,NULL);
 	}
 	
 	else if (argc > 1){
@@ -39,8 +37,6 @@ int main(int argc, char* argv[]){
 			pthread_create(&COUNT, NULL, &seek_Time, (void*)sec);
 			pthread_create(&PRINT, NULL, &print_Time, NULL);
 			
-			pthread_join(COUNT,NULL);
-			pthread_join(PRINT,NULL);
 		}
 	}
 	
@@ -61,7 +57,6 @@ void *seek_Time(void *i){
 
 void *print_Time(void *i){
 	
-	int sec = *((int *) i);
 	
 	pthread_exit(NULL);
 }
