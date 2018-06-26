@@ -12,8 +12,19 @@ using namespace std;
 
 int main(int argc, char* argv[]){
 	
+	pthread_t COUNT,PRINT;
+	
+	
+	
 	//Use default 25 sec if no argument
-	if(argc == 1) { work(STANDARD_TIME); }
+	if(argc == 1){ 
+		
+		pthread_create(&COUNT, NULL, &seek_Time, (void*)STANDARD_TIME);
+		pthread_create(&PRINT, NULL, &print_Time, NULL);
+		
+		pthread_join(COUNT,NULL);
+		pthread_join(PRINT,NULL);
+	}
 	
 	else if (argc > 1){
 		
@@ -24,19 +35,25 @@ int main(int argc, char* argv[]){
 			return 0;
 		}
 		
-		else
-			work(sec);
+		else{
+			pthread_create(&COUNT, NULL, &seek_Time, (void*)sec);
+			pthread_create(&PRINT, NULL, &print_Time, NULL);
+			
+			pthread_join(COUNT,NULL);
+			pthread_join(PRINT,NULL);
+		}
 	}
 	
 	return 0;
 }
 
 
-int work(int sec){
+void *seek_Time(void *i){
 
 	clock_t start;
     double duration;
-	
+    
+	int sec = *((int *) i);
 	
 
     start = clock();
@@ -46,56 +63,13 @@ int work(int sec){
 	
 	printf("Duration = %4.2f\n",duration);
 	
-	
-	
-	return 0;
+	pthread_exit(NULL);
 }
 
 
-
-//pid_t PID, PID2;
+void *print_Time(void *i){
 	
+	int sec = *((int *) i);
 	
-	///* This child thread should notify the other child
-	 //* upon reaching the specified number of seconds 
-	 //*/
-	
-	//PID = fork();
-	
-	//if(PID == 0){ //Child proccess executes code here
-		
-		///* This second child prints the hour, minute, and second 
-		 //* of the time of day to the user terminal once every 
-		 //* second 
-		 //*/
-		//PID2 = fork();
-		
-		//if(PID == 0){ //Child process executes code here
-			
-			
-		//}
-		
-		//else if(PID > 0){//Parent process executes code here
-			
-		
-		//}
-		
-		//else{
-			//perror("fork() error");
-			//exit(-1);		
-		//} // End if
-		
-		
-		
-		
-	//}
-
-	//else if(PID > 0){ //Parent process executes code here
-		
-		//cout << "\nHave a nice day" << endl;
-	//}
-
-	//else{
-		//perror("fork() error");
-		//exit(-1);		
-	//} // End if
+	pthread_exit(NULL);
+}
