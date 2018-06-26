@@ -51,7 +51,7 @@ int main(int argc, char* argv[]){
 void *seek_Time(void *i){
 
 	clock_t start;
-    double duration;
+    	double duration;
     
 	int sec = *((int *) i);
 	
